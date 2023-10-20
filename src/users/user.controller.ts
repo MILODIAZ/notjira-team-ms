@@ -67,10 +67,10 @@ export class UserController {
   }
 
   @MessagePattern(UserMSG.UPDATE)
-  async update(@Payload() message: { id: number; payload: userDto }) {
+  async update(@Payload() message: { userName: string; payload: userDto }) {
     try {
       const updateUser = await this.usersService.update(
-        message.id,
+        message.userName,
         message.payload,
       );
       console.log('user updated');

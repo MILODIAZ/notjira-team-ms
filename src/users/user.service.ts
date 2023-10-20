@@ -36,10 +36,10 @@ export class UserService {
     });
   }
 
-  async update(id: number, payload: userDto) {
-    const user = await this.userRepo.findOneBy({ id });
+  async update(userName: string, payload: userDto) {
+    const user = await this.userRepo.findOneBy({ userName });
     if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
+      throw new NotFoundException(`User ${userName} not found`);
     }
     this.userRepo.merge(user, payload);
     return await this.userRepo.save(user).catch((error) => {
@@ -50,7 +50,7 @@ export class UserService {
   async delete(id: number) {
     const user = await this.userRepo.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
+      throw new NotFoundException(`User ${id} not found`);
     }
     this.userRepo.delete({ id });
     return user;
