@@ -10,9 +10,12 @@ import { UserController } from './users/user.controller';
 import { UserService } from './users/user.service';
 import { TeamController } from './teams/team.controller';
 import { TeamService } from './teams/team.service';
+import { ProjectsController } from './projects/projects.controller';
+import { ProjectsService } from './projects/projects.service';
 import config from './config';
 import { User } from './users/user.entity';
 import { Team } from './teams/team.entity';
+import { Project } from './projects/projects.entity';
 
 @Module({
   imports: [
@@ -44,9 +47,14 @@ import { Team } from './teams/team.entity';
         };
       },
     }),
-    TypeOrmModule.forFeature([User, Team]),
+    TypeOrmModule.forFeature([User, Team, Project]),
   ],
-  controllers: [AppController, UserController, TeamController],
-  providers: [AppService, UserService, TeamService],
+  controllers: [
+    AppController,
+    UserController,
+    TeamController,
+    ProjectsController,
+  ],
+  providers: [AppService, UserService, TeamService, ProjectsService],
 })
 export class AppModule {}

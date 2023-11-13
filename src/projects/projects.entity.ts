@@ -4,15 +4,13 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
-import { User } from 'src/users/user.entity';
-import { Project } from 'src/projects/projects.entity';
+import { Team } from 'src/teams/team.entity';
 
-@Entity('teams')
-export class Team {
+@Entity('projects')
+export class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,12 +31,6 @@ export class Team {
   })
   updateAt: Date;
 
-  @ManyToMany(() => User, (user) => user.teams, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  users: User[];
-
-  @OneToMany(() => Project, (project) => project.team)
-  projects: Project[];
+  @ManyToOne(() => Team, (team) => team.projects)
+  team: Team;
 }
