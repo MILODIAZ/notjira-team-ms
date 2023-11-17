@@ -10,9 +10,11 @@ export class taskDto {
 
     @ApiProperty()
     @IsPositive()
+    @IsOptional()
     readonly projectId: number;
 
     @ApiProperty()
     @IsPositive()
+    @IsOptional()
     readonly userId: number;
 }
