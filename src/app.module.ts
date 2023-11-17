@@ -16,6 +16,9 @@ import config from './config';
 import { User } from './users/user.entity';
 import { Team } from './teams/team.entity';
 import { Project } from './projects/projects.entity';
+import { Task } from './tasks/tasks.entity';
+import { TasksController } from './tasks/tasks.controller';
+import { TasksService } from './tasks/tasks.service';
 
 @Module({
   imports: [
@@ -47,14 +50,15 @@ import { Project } from './projects/projects.entity';
         };
       },
     }),
-    TypeOrmModule.forFeature([User, Team, Project]),
+    TypeOrmModule.forFeature([User, Team, Project, Task]),
   ],
   controllers: [
     AppController,
     UserController,
     TeamController,
     ProjectsController,
+    TasksController,
   ],
-  providers: [AppService, UserService, TeamService, ProjectsService],
+  providers: [AppService, UserService, TeamService, ProjectsService, TasksService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -11,14 +11,16 @@ import { userDto } from './user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(@InjectRepository(User) private userRepo: Repository<User>) { }
 
   async findAll() {
-    return this.userRepo.find();
+    return this.userRepo.find({
+      relations: ['teams, tasks'],
+    });
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
+    const user = await this.userRepo.findOne({ where: { id }, relations: ['teams, tasks'] });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
     }
@@ -26,7 +28,7 @@ export class UserService {
   }
 
   async findByUserName(userName: string) {
-    return await this.userRepo.findOne({ where: { userName } });
+    return await this.userRepo.findOne({ where: { userName }, relations: ['teams, tasks'] });
   }
 
   async create(payload: userDto) {
@@ -47,12 +49,12 @@ export class UserService {
     });
   }
 
-  async delete(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
+  async delete(userName: string) {
+    const user = await this.userRepo.findOneBy({ userName });
     if (!user) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User ${userName} not found`);
     }
-    this.userRepo.delete({ id });
+    this.userRepo.delete({ userName });
     return user;
   }
 }

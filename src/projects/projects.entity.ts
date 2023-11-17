@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany
 } from 'typeorm';
 
 import { Team } from 'src/teams/team.entity';
+import { Task } from 'src/tasks/tasks.entity';
 
 @Entity('projects')
 export class Project {
@@ -31,6 +33,14 @@ export class Project {
   })
   updateAt: Date;
 
-  @ManyToOne(() => Team, (team) => team.projects)
+  @ManyToOne(() => Team, (team) => team.projects, {
+    nullable: true, onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   team: Team;
+
+  @OneToMany(() => Task, (task) => task.project)
+  tasks: Task[];
 }
+
+

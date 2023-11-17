@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 import { Team } from 'src/teams/team.entity';
+import { Task } from 'src/tasks/tasks.entity';
 
 @Entity('users')
 export class User {
@@ -46,4 +48,7 @@ export class User {
     },
   })
   teams: Team[];
+
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
 }

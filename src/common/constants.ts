@@ -27,3 +27,11 @@ export enum ProjectMSG {
   UPDATE = 'UPDATE_PROJECT',
   DELETE = 'DELETE_PROJECT',
 }
+
+export enum TaskMSG {
+  CREATE = 'CREATE_TASK',
+  FIND_ALL = 'FIND_TASKS',
+  FIND_ONE = 'FIND_TASK',
+  UPDATE = 'UPDATE_TASK',
+  DELETE = 'DELETE_TASK',
+}

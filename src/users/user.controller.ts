@@ -9,7 +9,7 @@ import { UserMSG } from 'src/common/constants';
 @ApiTags('Users')
 @Controller('api/v1/users')
 export class UserController {
-  constructor(private usersService: UserService) {}
+  constructor(private usersService: UserService) { }
 
   @MessagePattern(UserMSG.FIND_ALL)
   async findAll() {
@@ -89,9 +89,9 @@ export class UserController {
   }
 
   @MessagePattern(UserMSG.DELETE)
-  async delete(@Payload() id: number) {
+  async delete(@Payload() userName: string) {
     try {
-      const deletedUser = await this.usersService.delete(id);
+      const deletedUser = await this.usersService.delete(userName);
       return {
         success: true,
         message: 'User deleted succesfully',
