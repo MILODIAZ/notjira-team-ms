@@ -19,12 +19,12 @@ export class TeamService {
 
   async findAll() {
     return this.teamRepo.find({
-      relations: ['users'],
+      relations: ['users', 'projects'],
     });
   }
 
   async findOne(id: number) {
-    const team = await this.teamRepo.findOneBy({ id });
+    const team = await this.teamRepo.findOne({ where: { id }, relations: ['users', 'projects'] });
     if (!team) {
       throw new NotFoundException(`Team #${id} not found`);
     }
@@ -32,7 +32,7 @@ export class TeamService {
   }
 
   async findByName(name: string) {
-    return await this.teamRepo.findOne({ where: { name } });
+    return await this.teamRepo.findOne({ where: { name }, relations: ['users', 'projects'] });
   }
 
   async create(payload: teamDto) {
@@ -65,7 +65,7 @@ export class TeamService {
   async addUser(teamId: number, userName: string) {
     const team = await this.teamRepo.findOne({
       where: { id: teamId },
-      relations: ['users, projects'],
+      relations: ['users', 'projects'],
     });
     if (!team) {
       throw new NotFoundException(`Team #${teamId} not found`);

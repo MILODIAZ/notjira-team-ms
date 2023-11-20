@@ -49,6 +49,6 @@ export class User {
   })
   teams: Team[];
 
-  @OneToMany(() => Task, (task) => task.user)
+  @OneToMany(() => Task, (task) => task.responsable)
   tasks: Task[];
 }

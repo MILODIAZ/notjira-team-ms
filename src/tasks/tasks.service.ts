@@ -4,10 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist';
-import { Repository } from 'typeorm';
+import { Repository, FindOptionsWhere, ILike } from 'typeorm';
 
 import { Task } from './tasks.entity';
-import { taskDto } from './tasks.dto';
+import { taskDto, updateTaskDto, FilterTasksDto } from './tasks.dto';
 import { ProjectsService } from 'src/projects/projects.service';
 import { UserService } from 'src/users/user.service';
 
@@ -19,14 +19,33 @@ export class TasksService {
     private UserService: UserService,
   ) { }
 
-  async findAll() {
+  async findAll(params?: FilterTasksDto) {
+    if (params) {
+      const where: FindOptionsWhere<Task> = {};
+      const { filterName, filterResponsable, filterStatus } = params;
+      if (filterName) {
+        where.name = ILike(`%${filterName}%`);
+      }
+      if (filterStatus) {
+        where.status = filterStatus;
+      }
+      if (filterResponsable) {
+        where.responsable = {
+          userName: filterResponsable,
+        };
+      }
+      return this.taskRepo.find({
+        relations: ['project', 'responsable', 'creator'],
+        where,
+      });
+    }
     return this.taskRepo.find({
-      relations: ['project', 'user'],
+      relations: ['project', 'responsable', 'creator'],
     })
   }
 
   async findOne(id: number) {
-    const task = await this.taskRepo.findOne({ where: { id }, relations: ['project, user'] });
+    const task = await this.taskRepo.findOne({ where: { id }, relations: ['project', 'responsable', 'creator'] });
     if (!task) {
       throw new NotFoundException(`task #${id} not found`);
     }
@@ -34,7 +53,7 @@ export class TasksService {
   }
 
   async findByName(name: string) {
-    return await this.taskRepo.findOne({ where: { name }, relations: ['project, user'] });
+    return await this.taskRepo.findOne({ where: { name }, relations: ['project', 'responsable', 'creator'] });
   }
 
   async create(payload: taskDto) {
@@ -43,27 +62,27 @@ export class TasksService {
       const project = await this.ProjectService.findOne(payload.projectId);
       newtask.project = project;
     }
-    if (payload.userId) {
-      const user = await this.UserService.findOne(payload.userId);
-      newtask.user = user;
+    if (payload.creatorUser) {
+      const user = await this.UserService.findByUserName(payload.creatorUser);
+      newtask.responsable = user;
+    }
+    if (payload.responsableUser) {
+      const user = await this.UserService.findByUserName(payload.responsableUser);
+      newtask.responsable = user;
     }
     return await this.taskRepo.save(newtask).catch((error) => {
       throw new ConflictException(error.detail);
     });
   }
 
-  async update(id: number, payload: taskDto) {
+  async update(id: number, payload: updateTaskDto) {
     const task = await this.taskRepo.findOneBy({ id });
     if (!task) {
       throw new NotFoundException(`task #${id} not found`);
     }
-    if (payload.projectId) {
-      const project = await this.ProjectService.findOne(payload.projectId);
-      task.project = project;
-    }
-    if (payload.userId) {
-      const user = await this.UserService.findOne(payload.userId);
-      task.user = user;
+    if (payload.responsableUser) {
+      const user = await this.UserService.findByUserName(payload.responsableUser);
+      task.responsable = user;
     }
     this.taskRepo.merge(task, payload);
     return await this.taskRepo.save(task).catch((error) => {
@@ -76,7 +95,7 @@ export class TasksService {
     if (!task) {
       throw new NotFoundException(`task #${id} not found`);
     }
-    this.taskRepo.delete({ id });
-    return task;
+    task.deleted = true;
+    return await this.taskRepo.save(task);
   }
 }

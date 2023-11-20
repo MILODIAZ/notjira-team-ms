@@ -10,6 +10,13 @@ import {
 import { User } from 'src/users/user.entity';
 import { Project } from 'src/projects/projects.entity';
 
+enum TaskStatus {
+    PENDING = 'pendiente',
+    IN_PROGRESS = 'en progreso',
+    COMPLETED = 'finalizada',
+}
+
+
 @Entity('tasks')
 export class Task {
     @PrimaryGeneratedColumn()
@@ -17,6 +24,22 @@ export class Task {
 
     @Column({ type: 'varchar', unique: true, length: 255 })
     name: string;
+
+    @Column({
+        type: 'enum',
+        enum: TaskStatus,
+        default: TaskStatus.PENDING,
+    })
+    status: TaskStatus;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    startDate: Date;
+
+    @Column({ type: 'timestamptz', nullable: true })
+    endDate: Date;
+
+    @Column({ type: 'boolean', default: false })
+    deleted: boolean;
 
     @CreateDateColumn({
         name: 'created_at',
@@ -42,5 +65,8 @@ export class Task {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
     })
-    user: User;
+    responsable: User;
+
+    @ManyToOne(() => User, { nullable: false })
+    creator: User;
 }

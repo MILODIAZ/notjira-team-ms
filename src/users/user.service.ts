@@ -15,12 +15,12 @@ export class UserService {
 
   async findAll() {
     return this.userRepo.find({
-      relations: ['teams, tasks'],
+      relations: ['teams', 'tasks'],
     });
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOne({ where: { id }, relations: ['teams, tasks'] });
+    const user = await this.userRepo.findOne({ where: { id }, relations: ['teams', 'tasks'] });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
     }
@@ -28,7 +28,7 @@ export class UserService {
   }
 
   async findByUserName(userName: string) {
-    return await this.userRepo.findOne({ where: { userName }, relations: ['teams, tasks'] });
+    return await this.userRepo.findOne({ where: { userName }, relations: ['teams', 'tasks'] });
   }
 
   async create(payload: userDto) {

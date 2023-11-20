@@ -4,7 +4,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices/decorators';
 
 import { TasksService } from './tasks.service';
 import { TaskMSG } from 'src/common/constants';
-import { taskDto } from './tasks.dto';
+import { taskDto, updateTaskDto, FilterTasksDto } from './tasks.dto';
 
 @ApiTags('Tasks')
 @Controller('api/v1/tasks')
@@ -12,9 +12,9 @@ export class TasksController {
     constructor(private tasksService: TasksService) { }
 
     @MessagePattern(TaskMSG.FIND_ALL)
-    async findAll() {
+    async findAll(@Payload() params: FilterTasksDto) {
         try {
-            const foundTasks = await this.tasksService.findAll();
+            const foundTasks = await this.tasksService.findAll(params);
             return {
                 success: true,
                 message: 'Tasks found',
@@ -66,7 +66,7 @@ export class TasksController {
     }
 
     @MessagePattern(TaskMSG.UPDATE)
-    async update(@Payload() message: { id: number; payload: taskDto }) {
+    async update(@Payload() message: { id: number; payload: updateTaskDto }) {
         try {
             const updateTask = await this.tasksService.update(
                 message.id,
