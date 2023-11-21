@@ -1,72 +1,75 @@
 import {
-    PrimaryGeneratedColumn,
-    Column,
-    Entity,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne,
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 import { User } from 'src/users/user.entity';
 import { Project } from 'src/projects/projects.entity';
 
 enum TaskStatus {
-    PENDING = 'pendiente',
-    IN_PROGRESS = 'en progreso',
-    COMPLETED = 'finalizada',
+  PENDING = 'pendiente',
+  IN_PROGRESS = 'en progreso',
+  COMPLETED = 'finalizada',
 }
-
 
 @Entity('tasks')
 export class Task {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'varchar', unique: true, length: 255 })
-    name: string;
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
 
-    @Column({
-        type: 'enum',
-        enum: TaskStatus,
-        default: TaskStatus.PENDING,
-    })
-    status: TaskStatus;
+  @Column({ type: 'varchar', length: 255 })
+  description: string;
 
-    @Column({ type: 'timestamptz', nullable: true })
-    startDate: Date;
+  @Column({
+    type: 'enum',
+    enum: TaskStatus,
+    default: TaskStatus.PENDING,
+  })
+  status: TaskStatus;
 
-    @Column({ type: 'timestamptz', nullable: true })
-    endDate: Date;
+  @Column({ type: 'timestamptz', nullable: true })
+  startDate: Date;
 
-    @Column({ type: 'boolean', default: false })
-    deleted: boolean;
+  @Column({ type: 'timestamptz', nullable: true })
+  endDate: Date;
 
-    @CreateDateColumn({
-        name: 'created_at',
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
-    createAt: Date;
+  @Column({ type: 'boolean', default: false })
+  deleted: boolean;
 
-    @UpdateDateColumn({
-        name: 'updated_at',
-        type: 'timestamptz',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
-    updateAt: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createAt: Date;
 
-    @ManyToOne(() => Project, (project) => project.tasks, {
-        nullable: false, onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    })
-    project: Project;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updateAt: Date;
 
-    @ManyToOne(() => User, (user) => user.tasks, {
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-    })
-    responsable: User;
+  @ManyToOne(() => Project, (project) => project.tasks, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  project: Project;
 
-    @ManyToOne(() => User, { nullable: false })
-    creator: User;
+  @ManyToOne(() => User, (user) => user.tasks, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  responsable: User;
+
+  @ManyToOne(() => User, { nullable: false })
+  creator: User;
 }

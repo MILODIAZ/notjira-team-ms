@@ -17,7 +17,7 @@ export class TasksService {
     @InjectRepository(Task) private taskRepo: Repository<Task>,
     private ProjectService: ProjectsService,
     private UserService: UserService,
-  ) { }
+  ) {}
 
   async findAll(params?: FilterTasksDto) {
     if (params) {
@@ -41,11 +41,14 @@ export class TasksService {
     }
     return this.taskRepo.find({
       relations: ['project', 'responsable', 'creator'],
-    })
+    });
   }
 
   async findOne(id: number) {
-    const task = await this.taskRepo.findOne({ where: { id }, relations: ['project', 'responsable', 'creator'] });
+    const task = await this.taskRepo.findOne({
+      where: { id },
+      relations: ['project', 'responsable', 'creator'],
+    });
     if (!task) {
       throw new NotFoundException(`task #${id} not found`);
     }
@@ -53,7 +56,10 @@ export class TasksService {
   }
 
   async findByName(name: string) {
-    return await this.taskRepo.findOne({ where: { name }, relations: ['project', 'responsable', 'creator'] });
+    return await this.taskRepo.findOne({
+      where: { name },
+      relations: ['project', 'responsable', 'creator'],
+    });
   }
 
   async create(payload: taskDto) {
@@ -64,11 +70,7 @@ export class TasksService {
     }
     if (payload.creatorUser) {
       const user = await this.UserService.findByUserName(payload.creatorUser);
-      newtask.responsable = user;
-    }
-    if (payload.responsableUser) {
-      const user = await this.UserService.findByUserName(payload.responsableUser);
-      newtask.responsable = user;
+      newtask.creator = user;
     }
     return await this.taskRepo.save(newtask).catch((error) => {
       throw new ConflictException(error.detail);
@@ -81,7 +83,9 @@ export class TasksService {
       throw new NotFoundException(`task #${id} not found`);
     }
     if (payload.responsableUser) {
-      const user = await this.UserService.findByUserName(payload.responsableUser);
+      const user = await this.UserService.findByUserName(
+        payload.responsableUser,
+      );
       task.responsable = user;
     }
     this.taskRepo.merge(task, payload);
