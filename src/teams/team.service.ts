@@ -15,7 +15,7 @@ export class TeamService {
   constructor(
     @InjectRepository(Team) private teamRepo: Repository<Team>,
     @InjectRepository(User) private userRepo: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll() {
     return this.teamRepo.find({
@@ -24,7 +24,10 @@ export class TeamService {
   }
 
   async findOne(id: number) {
-    const team = await this.teamRepo.findOne({ where: { id }, relations: ['users', 'projects'] });
+    const team = await this.teamRepo.findOne({
+      where: { id },
+      relations: ['users', 'projects'],
+    });
     if (!team) {
       throw new NotFoundException(`Team #${id} not found`);
     }
@@ -32,7 +35,10 @@ export class TeamService {
   }
 
   async findByName(name: string) {
-    return await this.teamRepo.findOne({ where: { name }, relations: ['users', 'projects'] });
+    return await this.teamRepo.findOne({
+      where: { name },
+      relations: ['users', 'projects'],
+    });
   }
 
   async create(payload: teamDto) {

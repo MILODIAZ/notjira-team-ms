@@ -105,10 +105,10 @@ export class TeamController {
   }
 
   @MessagePattern(TeamMSG.ADD_USER)
-  async addUser(@Payload() message: { teamId: number; userName: string }) {
+  async addUser(@Payload() message: { id: number; userName: string }) {
     try {
       const user = await this.teamsService.addUser(
-        message.teamId,
+        message.id,
         message.userName,
       );
       return {
