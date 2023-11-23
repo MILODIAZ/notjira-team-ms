@@ -22,7 +22,8 @@ export class TasksService {
   async findAll(params?: FilterTasksDto) {
     if (params) {
       const where: FindOptionsWhere<Task> = {};
-      const { filterName, filterResponsable, filterStatus } = params;
+      const { filterName, filterResponsable, filterStatus, filterProject } =
+        params;
       if (filterName) {
         where.name = ILike(`%${filterName}%`);
       }
@@ -32,6 +33,11 @@ export class TasksService {
       if (filterResponsable) {
         where.responsable = {
           userName: filterResponsable,
+        };
+      }
+      if (filterProject) {
+        where.project = {
+          id: filterProject,
         };
       }
       return this.taskRepo.find({

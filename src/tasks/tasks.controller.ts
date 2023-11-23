@@ -48,7 +48,7 @@ export class TasksController {
   }
 
   @MessagePattern(TaskMSG.CREATE)
-  async create(@Payload() payload: any) {
+  async create(@Payload() payload: taskDto) {
     try {
       const createdTask = await this.tasksService.create(payload);
       return {
