@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 import { User } from 'src/users/user.entity';
 import { Project } from 'src/projects/projects.entity';
+import { Comment } from 'src/comments/comment.entity';
 
 enum TaskStatus {
   PENDING = 'pendiente',
@@ -72,4 +74,7 @@ export class Task {
 
   @ManyToOne(() => User, { nullable: false })
   creator: User;
+
+  @OneToMany(() => Comment, (comment) => comment.task)
+  comments: Comment[];
 }

@@ -24,7 +24,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to found teams',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -42,7 +42,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Team not found',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -60,7 +60,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to create team',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -81,7 +81,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to update team',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -99,7 +99,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to delete team',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -120,7 +120,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to add user',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -141,7 +141,7 @@ export class TeamController {
       return {
         success: false,
         message: 'Failed to remove user',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }

@@ -9,6 +9,7 @@ import { Repository, FindOptionsWhere, ILike } from 'typeorm';
 import { Task } from './tasks.entity';
 import { taskDto, updateTaskDto, FilterTasksDto } from './tasks.dto';
 import { ProjectsService } from 'src/projects/projects.service';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UserService } from 'src/users/user.service';
 
 @Injectable()
@@ -41,19 +42,19 @@ export class TasksService {
         };
       }
       return this.taskRepo.find({
-        relations: ['project', 'responsable', 'creator'],
+        relations: ['project', 'responsable', 'creator', 'comments'],
         where,
       });
     }
     return this.taskRepo.find({
-      relations: ['project', 'responsable', 'creator'],
+      relations: ['project', 'responsable', 'creator', 'comments'],
     });
   }
 
   async findOne(id: number) {
     const task = await this.taskRepo.findOne({
       where: { id },
-      relations: ['project', 'responsable', 'creator'],
+      relations: ['project', 'responsable', 'creator', 'comments'],
     });
     if (!task) {
       throw new NotFoundException(`task #${id} not found`);
@@ -64,7 +65,7 @@ export class TasksService {
   async findByName(name: string) {
     return await this.taskRepo.findOne({
       where: { name },
-      relations: ['project', 'responsable', 'creator'],
+      relations: ['project', 'responsable', 'creator', 'comments'],
     });
   }
 

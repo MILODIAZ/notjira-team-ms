@@ -4,22 +4,19 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
-import { Team } from 'src/teams/team.entity';
+import { User } from 'src/users/user.entity';
 import { Task } from 'src/tasks/tasks.entity';
-import { Comment } from 'src/comments/comment.entity';
 
-@Entity('users')
-export class User {
+@Entity('comments')
+export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', unique: true, length: 255 })
-  userName: string;
+  content: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -35,24 +32,17 @@ export class User {
   })
   updateAt: Date;
 
-  @ManyToMany(() => Team, (team) => team.users, {
+  @ManyToOne(() => Task, (task) => task.comments, {
+    nullable: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinTable({
-    name: 'users_teams',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'team_id',
-    },
+  task: Task;
+
+  @ManyToOne(() => User, (user) => user.comments, {
+    nullable: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
-  teams: Team[];
-
-  @OneToMany(() => Task, (task) => task.responsable)
-  tasks: Task[];
-
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
+  user: User;
 }

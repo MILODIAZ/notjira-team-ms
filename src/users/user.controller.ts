@@ -9,7 +9,7 @@ import { UserMSG } from 'src/common/constants';
 @ApiTags('Users')
 @Controller('api/v1/users')
 export class UserController {
-  constructor(private usersService: UserService) { }
+  constructor(private usersService: UserService) {}
 
   @MessagePattern(UserMSG.FIND_ALL)
   async findAll() {
@@ -24,7 +24,7 @@ export class UserController {
       return {
         success: false,
         message: 'Failed to found users',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -42,7 +42,7 @@ export class UserController {
       return {
         success: false,
         message: 'User not found',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -61,7 +61,7 @@ export class UserController {
       return {
         success: false,
         message: 'Failed to create user',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -83,7 +83,7 @@ export class UserController {
       return {
         success: false,
         message: 'Failed to update user',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -101,7 +101,7 @@ export class UserController {
       return {
         success: false,
         message: 'Failed to delete user',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }

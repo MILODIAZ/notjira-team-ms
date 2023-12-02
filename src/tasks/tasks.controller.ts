@@ -24,7 +24,7 @@ export class TasksController {
       return {
         success: false,
         message: 'Failed to found tasks',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -42,7 +42,7 @@ export class TasksController {
       return {
         success: false,
         message: 'Task not found',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -60,7 +60,7 @@ export class TasksController {
       return {
         success: false,
         message: 'Failed to create task',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -81,7 +81,7 @@ export class TasksController {
       return {
         success: false,
         message: 'Failed to update task',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -99,7 +99,7 @@ export class TasksController {
       return {
         success: false,
         message: 'Failed to delete task',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }

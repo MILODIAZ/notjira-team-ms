@@ -24,7 +24,7 @@ export class ProjectsController {
       return {
         success: false,
         message: 'Failed to found projects',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -42,7 +42,7 @@ export class ProjectsController {
       return {
         success: false,
         message: 'Project not found',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -60,7 +60,7 @@ export class ProjectsController {
       return {
         success: false,
         message: 'Failed to create project',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -81,7 +81,7 @@ export class ProjectsController {
       return {
         success: false,
         message: 'Failed to update project',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
@@ -99,7 +99,7 @@ export class ProjectsController {
       return {
         success: false,
         message: 'Failed to delete project',
-        error: error.message,
+        error: (error as Record<string, string>)?.message,
       };
     }
   }
